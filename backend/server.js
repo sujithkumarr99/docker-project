@@ -3,16 +3,46 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const client = require("prom-client");   // 👈 ADD THIS
 
 const app = express();
+
+/* ---------------- PROMETHEUS SETUP ---------------- */
+
+// Collect default Node.js metrics
+client.collectDefaultMetrics();
+
+// Custom metric: HTTP request counter
+const httpRequestCounter = new client.Counter({
+  name: "http_requests_total",
+  help: "Total number of HTTP requests",
+  labelNames: ["method", "route", "status"]
+});
+
+// Middleware to count requests
+app.use((req, res, next) => {
+  res.on("finish", () => {
+    httpRequestCounter.inc({
+      method: req.method,
+      route: req.path,
+      status: res.statusCode
+    });
+  });
+  next();
+});
+
+/* ---------------- SECURITY + MIDDLEWARE ---------------- */
 
 app.use(cors());
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("dev"));
 
-// Connect to MongoDB container
-mongoose.connect("mongodb://mongo:27017/studentDB");
+/* ---------------- DATABASE ---------------- */
+
+mongoose.connect("mongodb://mongo:27017/studentDB")
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log(err));
 
 const StudentSchema = new mongoose.Schema({
   name: String,
@@ -59,5 +89,14 @@ app.delete("/api/students/:id", async (req, res) => {
   await Student.findByIdAndDelete(req.params.id);
   res.json({ message: "Student Deleted" });
 });
+
+/* ---------------- METRICS ENDPOINT (IMPORTANT) ---------------- */
+
+app.get("/metrics", async (req, res) => {
+  res.set("Content-Type", client.register.contentType);
+  res.end(await client.register.metrics());
+});
+
+/* ---------------- SERVER ---------------- */
 
 app.listen(5000, () => console.log("Backend running on 5000"));
