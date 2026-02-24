@@ -50,7 +50,7 @@ function App() {
       
       {/* LEFT SIDE */}
       <div className="left-panel">
-        <h2>🎓 Student Registration</h2>
+        <h2>Student Registration</h2>
 
         <input
           value={form.name}

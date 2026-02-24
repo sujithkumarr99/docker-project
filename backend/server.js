@@ -7,7 +7,7 @@ const client = require("prom-client");   // 👈 ADD THIS
 
 const app = express();
 
-/* ---------------- PROMETHEUS SETUP ---------------- */
+
 
 // Collect default Node.js metrics
 client.collectDefaultMetrics();
