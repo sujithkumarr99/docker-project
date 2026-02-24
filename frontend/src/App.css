@@ -1,0 +1,87 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: #0f172a;
+  color: white;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  min-height: 100vh;
+}
+
+/* LEFT PANEL */
+.left-panel {
+  background: #1e293b;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.left-panel h2 {
+  margin-bottom: 20px;
+}
+
+.left-panel input {
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+}
+
+.left-panel button {
+  padding: 12px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.left-panel button:hover {
+  background: #2563eb;
+}
+
+/* RIGHT PANEL */
+.right-panel {
+  padding: 40px;
+  background: #111827;
+  overflow-y: auto;
+}
+
+.student-card {
+  background: #1f2937;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  transition: 0.3s;
+}
+
+.student-card:hover {
+  transform: scale(1.02);
+}
+
+.student-card button {
+  margin-top: 10px;
+  padding: 6px 10px;
+  background: crimson;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.student-card button:hover {
+  background: darkred;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}
